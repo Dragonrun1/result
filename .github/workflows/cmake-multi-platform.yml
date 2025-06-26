@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
+      # Set fail-fast to false will ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
       fail-fast: false
 
       # Set up a matrix to run the following 3 configurations:
@@ -46,6 +46,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Install test dependencies
+      run: |
+        git submodule update --init --recursive
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -62,6 +65,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DBUILD_TESTING=ON
         -S ${{ github.workspace }}
 
     - name: Build
