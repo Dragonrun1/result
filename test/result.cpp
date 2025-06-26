@@ -1,4 +1,6 @@
-#define CATCH_CONFIG_MAIN
+#ifndef RESULT_TEST
+#define RESULT_TEST
+#endif // RESULT_TEST
 
 #include <iostream>
 #include <string>
@@ -85,10 +87,10 @@ TEST_CASE("Result copy/move", "[result]") {
     }
 }
 
-double times2(double x) { return x * 2.0; }
+double times2(const double x) { return x * 2.0; }
 
 struct times2_t {
-    double operator()(double x) { return x * 2.0; }
+    double operator()(double x) const { return x * 2.0; }
 };
 
 TEST_CASE("Result combinators and adapters", "[result]") {
@@ -167,7 +169,7 @@ TEST_CASE("Result combinators and adapters", "[result]") {
 
 TEST_CASE("Hash", "[result]") {
     auto result = Result<int, std::string>(Ok(5));
-    auto result2 = Result<int, std::string>(Err("cat"s));
+    const auto result2 = Result<int, std::string>(Err("cat"s));
     REQUIRE(std::hash<Result<int, std::string>>()(result) ==
             std::hash<int>()(result.unwrap()));
     REQUIRE(std::hash<Result<int, std::string>>()(result2) ==
