@@ -46,6 +46,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: true
     - name: Install test dependencies
       run: |
         git submodule update --init --recursive
