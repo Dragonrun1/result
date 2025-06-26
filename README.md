@@ -1,4 +1,4 @@
-# result
+# Result
 A C++17 implementation of the "value or error" type Result<T, E>.
 
 
@@ -217,9 +217,9 @@ Result<T, F>`
   Effectively, this returns `Ok` only if both `Results` are `Ok`, otherwise it
   returns the first `Err` encountered.
 
-  *Note:* The trailing underscore prevents conflict with the alternative 
-  operator
-  name `and`.
+  > [!NOTE]
+  > The trailing underscore prevents conflict with the alternative operator
+  > name `and`.
 
   ```cpp
   Result<int, std::string> result1 = Ok(5);
@@ -281,8 +281,9 @@ A `Result<unit_t, E>` behaves just like the void one should, but without the
 headache.
 To construct such a `Result`, you can use `Result<unit_t, E>(Ok());`.
 
-*Note:* that `Result` cannot have a `unit_t` error type.
-If you want a "null" error, use `std::optional<T>` instead.
+> [!NOTE]
+> `Result` cannot have a `unit_t` error type.
+> If you want a "null" error, use `std::optional<T>` instead.
 
 
 ### Other Niceties
@@ -309,3 +310,8 @@ be usable within other `constexpr` functions.
 Memory-wise, the memory required by `Result<T, E>` is equal to `max(sizeof(T), sizeof(E))+1`, however it will be
 aligned based on the highest alignment requirement. While a `Result<char, char>` should have a size of 2,
 `Result<int, int>` might have an aligned size of 8.
+
+
+## Compiling
+
+**TODO**
