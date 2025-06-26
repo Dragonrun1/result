@@ -14,8 +14,9 @@ find_package(Catch2 3 REQUIRED)
 
 add_library(cpp_result INTERFACE src/result.hpp)
 
-add_executable(tests ./test/result.cpp)
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain cpp_result)
+add_executable(result_tests ./test/result.cpp)
+set_target_properties(result_tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
+target_link_libraries(result_tests PRIVATE Catch2::Catch2WithMain cpp_result)
 
 enable_testing()
-add_test(NAME tests COMMAND tests)
+add_test(NAME tests COMMAND result_tests)

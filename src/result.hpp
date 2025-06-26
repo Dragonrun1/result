@@ -710,15 +710,17 @@ std::ostream& operator<<(
 }
 } // namespace result
 
-template <typename T, typename E>
-struct std::hash<result::Result<T, E>> {
-    std::size_t operator()(const result::Result<T, E>& result) const noexcept {
-        if(result.is_ok()) {
-            return hash<T>()(result.ok_unchecked());
+namespace std {
+    template <typename T, typename E>
+    struct hash<result::Result<T, E>> {
+        std::size_t operator()(const result::Result<T, E>& result) const noexcept {
+            if(result.is_ok()) {
+                return hash<T>()(result.ok_unchecked());
+            }
+            return hash<E>()(result.err_unchecked());
         }
-        return hash<E>()(result.err_unchecked());
-    }
-}; // namespace std
+    };
+} // namespace std
 
 #define PROPAGATE(res)                                                         \
     {                                                                          \
