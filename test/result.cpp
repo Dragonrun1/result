@@ -3,9 +3,8 @@
 #include <iostream>
 #include <string>
 
-#include <catch/catch.hpp>
-
-#include "result/result.h"
+#include "../src/result.hpp"
+#include <catch2/catch_test_macros.hpp>
 
 using namespace result;
 using namespace std::literals::string_literals;
@@ -87,6 +86,7 @@ TEST_CASE("Result copy/move", "[result]") {
 }
 
 double times2(double x) { return x * 2.0; }
+
 struct times2_t {
     double operator()(double x) { return x * 2.0; }
 };
