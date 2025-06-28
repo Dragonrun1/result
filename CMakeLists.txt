@@ -17,24 +17,27 @@ add_library(${PROJECT_NAME} INTERFACE
 )
 
 if (BUILD_TESTING)
-    # Try finding Git package only if BUILD_TESTING is ON
-    find_package(Git QUIET)
+    # Ignore trying to update submodules in GitHub Actions
+    if (NOT DEFINED ENV{CI})
+        # Try finding Git package only if BUILD_TESTING is ON
+        find_package(Git QUIET)
 
-    if (GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-        # Update submodules as needed
-        option(GIT_SUBMODULE "Check submodules during build" ON)
-        if (GIT_SUBMODULE)
-            message(STATUS "Submodule update")
-            execute_process(
-                    COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                    RESULT_VARIABLE GIT_SUBMODULE_RESULT
-            )
-            if (NOT GIT_SUBMODULE_RESULT EQUAL "0")
-                message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMODULE_RESULT}, please checkout submodules")
-            endif ()
-        endif ()
-    endif ()
+        if (GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+            # Update submodules as needed
+            option(GIT_SUBMODULE "Check submodules during build" ON)
+            if (GIT_SUBMODULE)
+                message(STATUS "Submodule update")
+                execute_process(
+                        COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                        RESULT_VARIABLE GIT_SUBMODULE_RESULT
+                )
+                if (NOT GIT_SUBMODULE_RESULT EQUAL "0")
+                    message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMODULE_RESULT}, please checkout submodules")
+                endif ()
+            endif () # GIT_SUBMODULE
+        endif () # GIT_FOUND
+    endif () # NOT DEFINED ENV{CI}
 
     # First try finding testing dependency Catch2 package in the
     # test/lib/Catch2/ directory
@@ -43,9 +46,6 @@ if (BUILD_TESTING)
         NO_DEFAULT_PATH
     )
     find_package(Catch2 3 REQUIRED)
-
-    # Enable adding tests by finding CTest package
-#    find_package(CTest REQUIRED)
 
     # Add test executable
     add_executable("${PROJECT_NAME}_tests"
@@ -57,7 +57,7 @@ if (BUILD_TESTING)
     # Add test command
     add_test(NAME test COMMAND "${PROJECT_NAME}_tests")
 
-endif ()
+endif () # BUILD_TESTING
 
 
 enable_testing()
