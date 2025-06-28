@@ -17,8 +17,10 @@ add_library(${PROJECT_NAME} INTERFACE
 )
 
 if (BUILD_TESTING)
+    message(STATUS "Building tests")
     # Ignore trying to update submodules in GitHub Actions
     if (NOT DEFINED ENV{CI})
+        message(STATUS "Not running in GitHub Actions")
         # Try finding Git package only if BUILD_TESTING is ON
         find_package(Git QUIET)
 
@@ -41,6 +43,8 @@ if (BUILD_TESTING)
 
     # First try finding testing dependency Catch2 package in the
     # test/lib/Catch2/ directory
+    message(STATUS "Local Catch2 path:")
+    message(STATUS "${PROJECT_SOURCE_DIR}/test/lib/Catch2")
     find_package(Catch2 3 REQUIRED
         PATHS "${PROJECT_SOURCE_DIR}/test/lib/Catch2"
         NO_DEFAULT_PATH
