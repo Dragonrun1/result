@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include "../src/result.hpp"
+#include "../include/cpp_result/result.hpp"
 #include <catch2/catch_test_macros.hpp>
 
 using namespace result;
