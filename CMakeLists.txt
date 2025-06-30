@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.19...3.21)
 project(
         cpp_result
-        VERSION 0.2.0
+        VERSION 0.2.1
         LANGUAGES CXX
         DESCRIPTION "A C++17 implementation of the 'value or error' type Result<T, E>."
         HOMEPAGE_URL "https://github.com/Dragonrun1/result"
