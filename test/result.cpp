@@ -1,7 +1,3 @@
-#ifndef RESULT_TEST
-#define RESULT_TEST
-#endif // RESULT_TEST
-
 #include <iostream>
 #include <string>
 
