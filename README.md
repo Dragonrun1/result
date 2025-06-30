@@ -32,7 +32,7 @@ type from the Rust programming language to C++.
 ## Example
 
 ```cpp
-#include "result/include/result.hpp"
+#include "include/cpp_result/result.hpp"
 #include <cmath>
 #include <iostream>
 
