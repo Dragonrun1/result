@@ -32,7 +32,7 @@ type from the Rust programming language to C++.
 ## Example
 
 ```cpp
-#include "result/result.h"
+#include "result/include/result.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -114,13 +114,15 @@ To get the value inside the `Result`, there are a few methods:
   *errors*, which by default calls `std::terminate()` and prints out a message.
   Thus, these functions should be used only when it is known what the `Result`
   contains, or when the error is unable to be handled.
-  Note that since this moves out of the `Result`, the `Result` should not be 
-  used afterward.
+
+  > [!Note]
+  > Since this moves the value out of the `Result`, the `Result` 
+  > should not be used afterwards.
   
   ```cpp
   Result<int, std::string> result = Ok(5);
   Result<int, std::string> result2 = Err("bad operation"s);
-  assert(result.unwrap() == 5);
+  assert(result.unwrap() == 5);[cmake_install.cmake](cmake-build-debug/cmake_install.cmake)
   //result.unwrap_err() errors
   assert(result2.unwrap_err() == "bad operation"s);
   //result2.unwrap() errors
