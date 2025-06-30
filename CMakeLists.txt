@@ -28,9 +28,11 @@ include(GNUInstallDirs)
 # Adding the install interface generator expression makes sure that the include
 # files are installed to the proper location (provided by GNUInstallDirs)
 target_include_directories(
-        ${PROJECT_NAME}
-        INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/include/${PROJECT_NAME}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+    ${PROJECT_NAME}
+    INTERFACE
+    $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/include/${PROJECT_NAME}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
 
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
 
@@ -40,43 +42,18 @@ if (BUILD_TESTING)
     add_subdirectory("${PROJECT_SOURCE_DIR}/test")
 endif () # BUILD_TESTING
 
-# locations are provided by GNUInstallDirs
-install(TARGETS ${PROJECT_NAME}
-        EXPORT ${PROJECT_NAME}_Targets
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+# Common install related config and settings
+include("common/install/CMakeLists.txt")
 
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file("${PROJECT_NAME}ConfigVersion.cmake"
-        VERSION ${PROJECT_VERSION}
-        COMPATIBILITY SameMajorVersion)
+# Common CPack related config and settings
+include("common/cpack/CMakeLists.txt")
 
-configure_package_config_file(
-        "${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
-        "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-        INSTALL_DESTINATION
-        ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
-
-install(EXPORT ${PROJECT_NAME}_Targets
-        FILE ${PROJECT_NAME}Targets.cmake
-        NAMESPACE ${PROJECT_NAME}::
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
-
-install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-        "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
-
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME} DESTINATION include)
-
-set(CPACK_PACKAGE_DIRECTORY distribution)
-set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
-set(CPACK_PACKAGE_VENDOR ${VENDOR_NAME})
-set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
-set(CPACK_SOURCE_IGNORE_FILES "build;\\.idea/;\\.git/")
-set(CPACK_VERBATIM_VARIABLES YES)
-
-set(CPACK_GENERATOR TGZ)
-set(CPACK_SOURCE_GENERATOR TGZ ZIP)
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    include("platform/windows/CMakeLists.txt")
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    include("platform/linux/CMakeLists.txt")
+else ()
+    message(FATAL_ERROR "${CMAKE_SYSTEM_NAME} is NOT a currently supported platform!")
+endif ()
 
 include(CPack)
