@@ -1,3 +1,7 @@
+# Copyright (c) 2018 Tyler Reisinger
+# Copyright (c) 2025 Michael Cummings
+# SPDX-License-Identifier: MIT
+
 cmake_minimum_required(VERSION 3.21)
 project(
         cpp_result
@@ -7,12 +11,11 @@ project(
         HOMEPAGE_URL "https://github.com/Dragonrun1/result"
 )
 
-set(VENDOR_NAME "Michael Cummings")
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(BUILD_TESTING "" OFF)
 
+# Ensure out-of-source build
 if ("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
     message(FATAL_ERROR "In-source builds are not allowed. Use a separate build directory")
 endif ()
@@ -43,15 +46,23 @@ if (BUILD_TESTING)
 endif () # BUILD_TESTING
 
 # Common install related config and settings
-include("common/install/CMakeLists.txt")
+include("cmake/install.cmake")
 
 # Common CPack related config and settings
-include("common/cpack/CMakeLists.txt")
+include("cmake/cpack.cmake")
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    include("platform/windows/CMakeLists.txt")
+    ###############
+    # CPack
+    ###############
+    set(CPACK_GENERATOR ZIP)
+    set(CPACK_SOURCE_GENERATOR ZIP)
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    include("platform/linux/CMakeLists.txt")
+    ###############
+    # CPack
+    ###############
+    set(CPACK_GENERATOR TGZ)
+    set(CPACK_SOURCE_GENERATOR TGZ)
 else ()
     message(FATAL_ERROR "${CMAKE_SYSTEM_NAME} is NOT a currently supported platform!")
 endif ()
