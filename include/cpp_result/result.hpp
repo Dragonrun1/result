@@ -1,5 +1,5 @@
-#ifndef RESULT_HPP
-#define RESULT_HPP
+#ifndef CPP_RESULT_HPP
+#define CPP_RESULT_HPP
 
 #include <cstdint>
 #include <functional>
@@ -730,4 +730,4 @@ struct hash<result::Result<T, E>> {
         }                                                                      \
     }
 
-#endif
+#endif // CPP_RESULT_HPP
