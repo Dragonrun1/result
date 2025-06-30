@@ -1,4 +1,5 @@
-# Common install related config and settings
+# Copyright (c) 2025 Michael Cummings
+# SPDX-License-Identifier: MIT
 
 # locations are provided by GNUInstallDirs
 install(TARGETS ${PROJECT_NAME}
