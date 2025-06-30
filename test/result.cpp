@@ -1,3 +1,7 @@
+// Copyright (c) 2018 Tyler Reisinger
+// Copyright (c) 2025 Michael Cummings
+// SPDX-License-Identifier: MIT
+
 #include <iostream>
 #include <string>
 
