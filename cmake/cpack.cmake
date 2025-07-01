@@ -16,6 +16,8 @@ set(CPACK_SOURCE_IGNORE_FILES
     "/.git/"
     "/.idea/"
     "/build/"
+    "/cmake-build-debug/"
+    "/cmake-build-release/"
     "/CMakeCache.txt"
     "/CMakeFiles/"
     "/cmake_install.cmake"

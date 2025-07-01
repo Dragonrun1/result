@@ -4,11 +4,11 @@
 
 cmake_minimum_required(VERSION 3.21)
 project(
-        cpp_result
-        VERSION 0.2.2
-        LANGUAGES CXX
-        DESCRIPTION "A C++17 implementation of the 'value or error' type Result<T, E>."
-        HOMEPAGE_URL "https://github.com/Dragonrun1/result"
+    cpp_result
+    VERSION 0.2.2
+    LANGUAGES CXX
+    DESCRIPTION "A C++17 implementation of the 'value or error' type Result<T, E>."
+    HOMEPAGE_URL "https://github.com/Dragonrun1/result"
 )
 
 set(CMAKE_CXX_STANDARD 17)
@@ -20,11 +20,16 @@ if ("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
     message(FATAL_ERROR "In-source builds are not allowed. Use a separate build directory")
 endif ()
 
-add_library(${PROJECT_NAME} INTERFACE
-    "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/result.hpp"
+add_library(${PROJECT_NAME} INTERFACE)
+target_sources(${PROJECT_NAME}
+    PRIVATE
+    FILE_SET HEADERS
+    BASE_DIRS
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 # Add library alias so the project can be uses with add_subdirectory
-add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+add_library(result::lib ALIAS ${PROJECT_NAME})
 
 include(GNUInstallDirs)
 
@@ -33,16 +38,19 @@ include(GNUInstallDirs)
 target_include_directories(
     ${PROJECT_NAME}
     INTERFACE
-    $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/include/${PROJECT_NAME}>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
 
+#get_target_property(cpp_result_sources ${PROJECT_NAME} INTERFACE_SOURCES)
+#source_group("Source Files \\ ${PROJECT_NAME}" FILES ${cpp_result_sources})
+
 if (BUILD_TESTING)
     include(CTest)
     enable_testing()
-    add_subdirectory("${PROJECT_SOURCE_DIR}/test")
+    add_subdirectory("${CMAKE_SOURCE_DIR}/test")
 endif () # BUILD_TESTING
 
 # Common install related config and settings
